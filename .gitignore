@@ -31,3 +31,15 @@ Thumbs.db
 .vscode/
 .idea/
 "@ | Set-Content .gitignore
+# Dataset - do not upload to GitHub
+data/FER-2013/
+data/raw/
+*.zip
+
+# Python / environments
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
