@@ -1,6 +1,6 @@
 # Facial Expression Recognition with CNNs — FER-2013
 
-A deep learning portfolio project that classifies facial expressions from face images using Convolutional Neural Networks (CNNs).
+A deep learning portfolio project that classifies facial expressions from face images using **Convolutional Neural Networks (CNNs)**.
 
 The project uses the **FER-2013** dataset, which contains 48x48 grayscale face images divided into seven emotion classes:
 
@@ -12,7 +12,7 @@ The project uses the **FER-2013** dataset, which contains 48x48 grayscale face i
 - sad
 - surprise
 
-This repository includes a complete machine learning workflow:
+This repository demonstrates a complete machine learning workflow:
 
 1. Dataset exploration
 2. Data preprocessing
@@ -22,6 +22,7 @@ This repository includes a complete machine learning workflow:
 6. Detailed evaluation
 7. Single-image prediction
 8. Gradio demo app with face detection preprocessing
+9. Real-world webcam testing and limitation analysis
 
 ---
 
@@ -29,10 +30,11 @@ This repository includes a complete machine learning workflow:
 
 - Built a working CNN model for facial expression classification
 - Compared a simple baseline CNN with an improved CNN
-- Used dropout, batch normalization, data augmentation and EarlyStopping
+- Used dropout, batch normalization, data augmentation, EarlyStopping and ModelCheckpoint
 - Evaluated the model using accuracy, loss, precision, recall, F1-score and confusion matrices
 - Built a Gradio app where users can upload or capture a face image and get an emotion prediction
 - Added face detection and cropping to improve real-world camera predictions
+- Tested the model on real webcam images and documented practical limitations
 
 ---
 
@@ -47,7 +49,7 @@ Facial-Expression-Recognition-with-CNNs-FER-2013/
 │   └── gradio_app.py
 │
 ├── data/
-│   └── FER-2013/
+│   └── FER-2013/              # Local only, not uploaded to GitHub
 │       ├── train/
 │       │   ├── angry/
 │       │   ├── disgust/
@@ -80,7 +82,9 @@ Facial-Expression-Recognition-with-CNNs-FER-2013/
 │   ├── single_prediction_probabilities.png
 │   ├── App screen shoot 1.png
 │   ├── App screen shoot 2.png
-│   └── App screen shoot 3.png
+│   ├── App screen shoot 3.png
+│   ├── App screen shoot 4.png
+│   └── App screen shoot 5.png
 │
 ├── models/
 │   ├── baseline_model.keras
@@ -215,7 +219,7 @@ This shows that the added techniques helped the model generalize better to unsee
 
 ![Baseline training curves](images/training_curves_baseline.png)
 
-The baseline model improved on the training data, but the validation performance increased more slowly. This suggests that the baseline model had limited generalization.
+The baseline model improved on the training data, but the validation performance increased more slowly. This suggests that the baseline model had limited generalization and showed signs of overfitting.
 
 ### Improved CNN
 
@@ -326,7 +330,7 @@ http://127.0.0.1:7860
 
 ---
 
-## Real-world App Testing
+## Real-World App Testing
 
 When testing the first app version with real camera images, the model often predicted incorrectly.
 
@@ -376,9 +380,35 @@ This shows that preprocessing is extremely important in deep learning. A good mo
 
 ---
 
+## Additional Webcam Tests and Limitations
+
+The app was also tested with new webcam images after adding face detection and cropping.
+
+### Example: Smile with Beard
+
+![Webcam smile with beard](images/App%20screen%20shoot%204.png)
+
+In this example, the model predicted `happy` with about **59.89%** confidence. The prediction is reasonable, but the confidence is lower than in the earlier clean smiling example.
+
+One possible explanation is that real webcam images still differ from FER-2013 images. Lighting, camera quality, face angle, shadows and facial hair can change the pixel patterns seen by the model.
+
+This is only an observation, not a confirmed rule. But it is a useful reminder that a CNN does not understand a face like a human. It learns patterns from pixels.
+
+### Example: Surprised Expression with Beard
+
+![Webcam surprised expression with beard](images/App%20screen%20shoot%205.png)
+
+In this example, the model predicted `fear` for a surprised facial expression. This is understandable because `fear` and `surprise` can share similar visual features, such as wide eyes and an open mouth.
+
+A small practical observation from testing is that predictions were more stable when the face was well lit, centered and close to the training format. Dark lower-face areas, such as beard or shadow, may influence the model because the image is reduced to a very small 48x48 grayscale representation.
+
+In simple words: the model is not judging my personality; it is struggling with pixels.
+
+---
+
 ## Important Machine Learning Lessons
 
-This project demonstrates several important deep learning concepts:
+This project demonstrates several important deep learning concepts.
 
 ### 1. CNNs are useful for image classification
 
@@ -404,7 +434,11 @@ The `disgust` class had far fewer examples than the other classes. The model rar
 
 The Gradio app improved significantly after adding face detection and cropping. This showed that real-world inputs must be prepared in the same way as the training data.
 
-### 6. Deep learning has limitations
+### 6. Real-world performance can differ from test-set performance
+
+The model can work well on FER-2013 test images but behave less reliably on webcam images. This is because real camera images have different lighting, image quality, backgrounds and face positions.
+
+### 7. Deep learning has limitations
 
 The model can make mistakes, especially when:
 
@@ -425,6 +459,7 @@ The model has several limitations:
 - The dataset is imbalanced.
 - Some emotions are subjective and difficult to label.
 - The model only predicts seven fixed emotion classes.
+- It can be affected by lighting, shadows, pose, face crop quality and image resolution.
 - It should not be used for important decisions about people.
 
 This project is intended for learning, experimentation and portfolio demonstration.
@@ -465,6 +500,8 @@ data/FER-2013/
 ├── train/
 └── test/
 ```
+
+The dataset folder should not be committed to GitHub.
 
 ### 5. Run the notebook
 
